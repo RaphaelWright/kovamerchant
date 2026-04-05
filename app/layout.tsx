@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KOVA Merchant",
-  description: "KOVA Merchant Dashboard",
+  title: "Kova Marketplace — Merchant Portal",
+  description: "Kova Marketplace Merchant Dashboard",
 };
 
 export default function RootLayout({

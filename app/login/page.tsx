@@ -36,15 +36,17 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo / Brand */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand mb-4">
-            <span className="text-white font-bold text-xl tracking-wide">K</span>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="Kova Marketplace" className="h-12 w-12 object-contain" />
+            <span className="text-2xl font-bold text-foreground tracking-tight">Kova Marketplace</span>
           </div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">KOVA Merchant</h1>
+          <h1 className="text-base font-semibold text-foreground">Merchant Portal</h1>
           <p className="text-muted text-sm mt-1">Sign in to manage your store</p>
         </div>
 
         {/* Card */}
-        <div className="bg-surface rounded-2xl shadow-sm border border-border p-8">
+        <div className="bg-surface rounded-2xl shadow-sm border border-border p-6 sm:p-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-foreground">Email</label>
@@ -87,7 +89,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-xs text-muted mt-6">
-          KOVA Online &copy; {new Date().getFullYear()}
+          Kova Marketplace &copy; {new Date().getFullYear()}
         </p>
       </div>
     </div>

@@ -131,6 +131,22 @@ export default function EditProductPage() {
                 onChange={(e) => set("stockQuantity", e.target.value)} className={inputCls} />
             </Field>
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Category">
+              <div className={`${inputCls} text-muted cursor-default select-none`}>
+                {product?.categoryName ?? "—"}
+              </div>
+            </Field>
+            {product?.subCategoryName && (
+              <Field label="Sub-Category">
+                <div className={`${inputCls} text-muted cursor-default select-none`}>
+                  {product.subCategoryName}
+                </div>
+              </Field>
+            )}
+          </div>
+          <p className="text-xs text-muted -mt-2">Category cannot be changed after creation.</p>
         </div>
 
         <div className="bg-surface rounded-2xl border border-border shadow-sm p-6 flex flex-col gap-4">
@@ -145,9 +161,9 @@ export default function EditProductPage() {
           </div>
           {specs.length === 0 && <p className="text-xs text-muted">No specifications added.</p>}
           {specs.map((sp, i) => (
-            <div key={i} className="flex gap-2 items-center">
-              <input value={sp.key} onChange={(e) => updateSpec(i, "key", e.target.value)} placeholder="Key" className={`${inputCls} flex-1`} />
-              <input value={sp.value} onChange={(e) => updateSpec(i, "value", e.target.value)} placeholder="Value" className={`${inputCls} flex-1`} />
+            <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
+              <input value={sp.key} onChange={(e) => updateSpec(i, "key", e.target.value)} placeholder="Key" className={inputCls} />
+              <input value={sp.value} onChange={(e) => updateSpec(i, "value", e.target.value)} placeholder="Value" className={inputCls} />
               <button type="button" onClick={() => removeSpec(i)} className="p-2 text-muted hover:text-red-500 transition">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
               </button>

@@ -1,24 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { productsApi } from "../../../lib/api";
+import { productsApi, categoriesApi } from "../../../lib/api";
 import ImagePicker from "../../../components/ImagePicker";
+import type { Category, SubCategory } from "../../../lib/types";
 
 export default function NewProductPage() {
   const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    price: "",
-    stockQuantity: "",
-    categoryId: "",
-  });
+  const [form, setForm] = useState({ name: "", description: "", price: "", stockQuantity: "" });
+  const [categoryId, setCategoryId] = useState<number | "">("");
+  const [subCategoryId, setSubCategoryId] = useState<number | "">("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [subCategoriesLoading, setSubCategoriesLoading] = useState(false);
   const [specs, setSpecs] = useState<{ key: string; value: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    categoriesApi.getAll()
+      .then(setCategories)
+      .catch(() => setError("Failed to load categories."))
+      .finally(() => setCategoriesLoading(false));
+  }, []);
+
+  function handleCategoryChange(id: number | "") {
+    setCategoryId(id);
+    setSubCategoryId("");
+    setSubCategories([]);
+    if (id) {
+      setSubCategoriesLoading(true);
+      categoriesApi.getSubCategories(id as number)
+        .then(setSubCategories)
+        .catch(() => {/* no sub-categories for this category */})
+        .finally(() => setSubCategoriesLoading(false));
+    }
+  }
 
   function set(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -52,7 +73,8 @@ export default function NewProductPage() {
         description: form.description || undefined,
         price: parseFloat(form.price),
         stockQuantity: form.stockQuantity ? parseInt(form.stockQuantity) : undefined,
-        categoryId: parseInt(form.categoryId),
+        categoryId: categoryId as number,
+        subCategoryId: subCategoryId || undefined,
         images: images.length ? images : undefined,
         specifications: Object.keys(specifications).length ? specifications : undefined,
       });
@@ -106,11 +128,36 @@ export default function NewProductPage() {
             </Field>
           </div>
 
-          <Field label="Category ID *">
-            <input required type="number" min="1" value={form.categoryId}
-              onChange={(e) => set("categoryId", e.target.value)}
-              placeholder="e.g. 1" className={inputCls} />
+          <Field label="Category *">
+            <select
+              required
+              value={categoryId}
+              onChange={(e) => handleCategoryChange(e.target.value ? Number(e.target.value) : "")}
+              disabled={categoriesLoading}
+              className={inputCls}
+            >
+              <option value="">{categoriesLoading ? "Loading…" : "Select a category"}</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
           </Field>
+
+          {(subCategoriesLoading || subCategories.length > 0) && (
+            <Field label="Sub-Category">
+              <select
+                value={subCategoryId}
+                onChange={(e) => setSubCategoryId(e.target.value ? Number(e.target.value) : "")}
+                disabled={subCategoriesLoading}
+                className={inputCls}
+              >
+                <option value="">{subCategoriesLoading ? "Loading…" : "None"}</option>
+                {subCategories.map((s) => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
+              </select>
+            </Field>
+          )}
         </div>
 
         {/* Images */}
@@ -130,11 +177,11 @@ export default function NewProductPage() {
           </div>
           {specs.length === 0 && <p className="text-xs text-muted">No specifications added.</p>}
           {specs.map((sp, i) => (
-            <div key={i} className="flex gap-2 items-center">
+            <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
               <input value={sp.key} onChange={(e) => updateSpec(i, "key", e.target.value)}
-                placeholder="Key" className={`${inputCls} flex-1`} />
+                placeholder="Key" className={inputCls} />
               <input value={sp.value} onChange={(e) => updateSpec(i, "value", e.target.value)}
-                placeholder="Value" className={`${inputCls} flex-1`} />
+                placeholder="Value" className={inputCls} />
               <button type="button" onClick={() => removeSpec(i)}
                 className="p-2 text-muted hover:text-red-500 transition">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>

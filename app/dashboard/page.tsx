@@ -19,7 +19,7 @@ function StatCard({
   return (
     <div className="bg-surface rounded-2xl border border-border p-6 shadow-sm flex flex-col gap-2">
       <p className="text-xs font-semibold text-muted uppercase tracking-wider">{label}</p>
-      <p className={`text-3xl font-bold ${accent ?? "text-foreground"}`}>{value}</p>
+      <p className={`text-xl sm:text-2xl lg:text-3xl font-bold ${accent ?? "text-foreground"}`}>{value}</p>
       {sub && <p className="text-xs text-muted">{sub}</p>}
     </div>
   );

@@ -63,20 +63,22 @@ export default function OrdersPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-background rounded-xl p-1 w-fit mb-6 border border-border">
-        {STATUS_TABS.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => switchTab(tab.value)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-              activeTab === tab.value
-                ? "bg-surface text-brand shadow-sm border border-border"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className="overflow-x-auto mb-6 -mx-1 px-1">
+        <div className="flex gap-1 bg-background rounded-xl p-1 w-fit border border-border">
+          {STATUS_TABS.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => switchTab(tab.value)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition shrink-0 ${
+                activeTab === tab.value
+                  ? "bg-surface text-brand shadow-sm border border-border"
+                  : "text-muted hover:text-foreground"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {loading ? (

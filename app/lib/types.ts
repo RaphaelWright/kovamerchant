@@ -122,6 +122,23 @@ export interface PagedResponse<T> {
   size: number;
 }
 
+export interface Category {
+  id: number;
+  name: string;
+  imageUrl: string;
+  description: string;
+  productCount: number;
+}
+
+export interface SubCategory {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  categoryId: number;
+  categoryName: string;
+}
+
 export interface ApiError {
   status: string;
   message: string;

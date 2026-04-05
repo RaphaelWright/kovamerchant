@@ -92,13 +92,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const Sidebar = (
     <aside className="flex flex-col h-full w-60 bg-surface border-r border-border">
       {/* Brand */}
-      <div className="flex items-center gap-3 px-6 py-6 border-b border-border">
-        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-brand shrink-0">
-          <span className="text-white font-bold text-base">K</span>
-        </div>
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-border">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.jpg" alt="Kova Marketplace" className="h-9 w-9 object-contain shrink-0" />
         <div className="min-w-0">
-          <p className="font-bold text-foreground text-sm leading-tight">KOVA</p>
-          <p className="text-xs text-muted truncate">Merchant Portal</p>
+          <p className="text-sm font-bold text-foreground leading-tight">Kova Marketplace</p>
+          <p className="text-xs text-muted leading-tight">Merchant Portal</p>
         </div>
       </div>
 
@@ -178,7 +177,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
-          <span className="font-bold text-foreground text-sm">KOVA Merchant</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.jpg" alt="Kova Marketplace" className="h-7 w-7 object-contain shrink-0" />
+          <span className="text-sm font-bold text-foreground">Kova Marketplace</span>
         </header>
 
         {/* Page content */}

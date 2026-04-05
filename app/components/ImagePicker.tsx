@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 interface UploadedImage {
   url: string;
@@ -43,9 +43,19 @@ export default function ImagePicker({ value, onChange, maxImages = 6 }: ImagePic
   );
   const [dragging, setDragging] = useState(false);
 
-  function syncParent(imgs: UploadedImage[]) {
-    onChange(imgs.filter((i) => i.url && !i.uploading && !i.error).map((i) => i.url));
-  }
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    onChangeRef.current(
+      images.filter((i) => i.url && !i.uploading && !i.error).map((i) => i.url)
+    );
+  }, [images]);
 
   async function processFiles(files: FileList | File[]) {
     const list = Array.from(files).slice(0, maxImages - images.length);
@@ -68,7 +78,6 @@ export default function ImagePicker({ value, onChange, maxImages = 6 }: ImagePic
           setImages((prev) => {
             const next = [...prev];
             next[idx] = { url, previewUrl: next[idx].previewUrl };
-            syncParent(next);
             return next;
           });
         } catch (err: unknown) {
@@ -84,11 +93,7 @@ export default function ImagePicker({ value, onChange, maxImages = 6 }: ImagePic
   }
 
   function removeImage(idx: number) {
-    setImages((prev) => {
-      const next = prev.filter((_, i) => i !== idx);
-      syncParent(next);
-      return next;
-    });
+    setImages((prev) => prev.filter((_, i) => i !== idx));
   }
 
   const onDrop = useCallback(

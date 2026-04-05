@@ -11,6 +11,8 @@ import type {
   UpdateOrderStatusPayload,
   SaveMomoPayload,
   OrderStatus,
+  Category,
+  SubCategory,
 } from "./types";
 
 const BASE_URL = "https://api.kovaonline.com";
@@ -133,6 +135,16 @@ export const invoicesApi = {
 
   get: (invoiceId: number) =>
     request<MerchantInvoice>(`/api/v1/merchant/dashboard/invoices/${invoiceId}`),
+};
+
+// ── Categories ────────────────────────────────────────────────────────────────
+
+export const categoriesApi = {
+  getAll: () =>
+    request<Category[]>("/api/v1/categories/all", {}, false),
+
+  getSubCategories: (categoryId: number) =>
+    request<SubCategory[]>(`/api/v1/sub-categories/all/category/${categoryId}`, {}, false),
 };
 
 // ── MoMo Account ──────────────────────────────────────────────────────────────
